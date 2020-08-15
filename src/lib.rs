@@ -9,7 +9,7 @@ pub struct Ticker {
     duration: Duration
 }
 
-#[deprecated("Use zip instead")]
+#[deprecated(since = "0.1.2", note = "Use zip instead")]
 pub struct Tickerator<T: Iterator> {
     inner: T,
     ticker: Ticker
