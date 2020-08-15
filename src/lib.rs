@@ -9,11 +9,13 @@ pub struct Ticker {
     duration: Duration
 }
 
+#[deprecated("Use zip instead")]
 pub struct Tickerator<T: Iterator> {
     inner: T,
     ticker: Ticker
 }
 
+#[allow(deprecated)]
 pub trait TickerIter<T: Iterator>  {
     fn ticker(self, duration: Duration) -> Tickerator<T>;
 }
@@ -43,6 +45,7 @@ impl Iterator for Ticker {
     }
 }
 
+#[allow(deprecated)]
 impl<T: Iterator> Tickerator<T> {
     pub fn new(iter: T, period: Duration) -> Self {
         Self {
@@ -52,6 +55,7 @@ impl<T: Iterator> Tickerator<T> {
     }
 }
 
+#[allow(deprecated)]
 impl<T: Iterator> Iterator for Tickerator<T> {
     type Item = (T::Item, bool);
 
@@ -63,6 +67,7 @@ impl<T: Iterator> Iterator for Tickerator<T> {
     }
 }
 
+#[allow(deprecated)]
 impl<T: Iterator> TickerIter<T> for T {
     fn ticker(self, duration: Duration) -> Tickerator<T> {
         Tickerator::new(self, duration)
