@@ -1,7 +1,7 @@
 [package]
 name = "tickr"
 description = "A iterator that gives you a infinite stream of bools, turing true once every time a certain duration has passed"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["post-rex <post-rex@pm.me>"]
 edition = "2018"
 license = "MIT"
