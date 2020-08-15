@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 use std::time::{Duration, Instant};
 
 #[derive(Debug)]
@@ -12,7 +15,7 @@ pub struct Tickerator<T: Iterator> {
 }
 
 pub trait TickerIter<T: Iterator>  {
-    fn ticker(self, duration: Duration);
+    fn ticker(self, duration: Duration) -> Tickerator<T>;
 }
 
 impl Ticker {
@@ -60,7 +63,7 @@ impl<T: Iterator> Iterator for Tickerator<T> {
     }
 }
 
-impl<T: Iterator> TickerIter for T {
+impl<T: Iterator> TickerIter<T> for T {
     fn ticker(self, duration: Duration) -> Tickerator<T> {
         Tickerator::new(self, duration)
     }
