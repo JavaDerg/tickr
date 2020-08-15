@@ -6,6 +6,7 @@ authors = ["post-rex <post-rex@pm.me>"]
 edition = "2018"
 license = "MIT"
 repository = "https://github.com/post-rex/tickr"
+documentation="https://docs.rs/tickr/0.1.0/tickr/"
 keywords = ["iterator", "time"]
 categories = ["date-and-time"]
 include = [
