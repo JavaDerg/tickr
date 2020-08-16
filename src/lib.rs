@@ -5,71 +5,36 @@ use std::time::{Duration, Instant};
 
 #[derive(Debug)]
 pub struct Ticker {
+    start: Instant,
     last: Instant,
     duration: Duration
 }
 
-#[deprecated(since = "0.1.2", note = "Use zip instead")]
-pub struct Tickerator<T: Iterator> {
-    inner: T,
-    ticker: Ticker
-}
-
-#[allow(deprecated)]
-pub trait TickerIter<T: Iterator>  {
-    fn ticker(self, duration: Duration) -> Tickerator<T>;
-}
-
 impl Ticker {
     pub fn new(period: Duration) -> Self {
+        let last = Instant::now();
         Self {
-            last: Instant::now(),
+            start: last.clone(),
+            last,
             duration: period
         }
     }
 
-    pub fn tick(&mut self) -> bool {
-        let state = self.last.elapsed() >= self.duration;
-        if state {
-            self.last = Instant::now();
+    pub fn tick(&mut self) -> Option<Duration> {
+        match self.last.elapsed() >= self.duration {
+            true => {
+                self.last = Instant::now();
+                Some(self.start.elapsed())
+            },
+            false => None
         }
-        state
     }
 }
 
 impl Iterator for Ticker {
-    type Item = bool;
+    type Item = Option<Duration>;
 
     fn next(&mut self) -> Option<Self::Item> {
         Some(self.tick())
-    }
-}
-
-#[allow(deprecated)]
-impl<T: Iterator> Tickerator<T> {
-    pub fn new(iter: T, period: Duration) -> Self {
-        Self {
-            inner: iter,
-            ticker: Ticker::new(period)
-        }
-    }
-}
-
-#[allow(deprecated)]
-impl<T: Iterator> Iterator for Tickerator<T> {
-    type Item = (T::Item, bool);
-
-    fn next(&mut self) -> Option<Self::Item> {
-        match self.inner.next() {
-            Some(item) => Some((item, self.ticker.tick())),
-            None => None
-        }
-    }
-}
-
-#[allow(deprecated)]
-impl<T: Iterator> TickerIter<T> for T {
-    fn ticker(self, duration: Duration) -> Tickerator<T> {
-        Tickerator::new(self, duration)
     }
 }
